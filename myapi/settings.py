@@ -17,10 +17,7 @@ import sys
 import json
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ROOT_DIR = os.path.dirname(BASE_DIR)
-SECRETS_PATH = os.path.join(ROOT_DIR,'.config_secret/Secrets.json')
+SECRETS_PATH = os.path.join(BASE_DIR,'Secrets.json')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -32,9 +29,9 @@ for key,value in secrets.items():
     setattr(sys.modules[__name__],key,value)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS =['*']
 
 
 # Application definition
