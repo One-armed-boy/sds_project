@@ -44,10 +44,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'accounts.apps.AccountsConfig',
     'res.apps.ResConfig',
-    'account.apps.AccountConfig',
 
     'rest_framework',
+    #DRF Authentication 이용
+    'rest_framework.authtoken',
+    'rest_auth',
+    #회원 가입
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_auth.registration',
 
 ]
 
@@ -138,4 +147,19 @@ STATICFILES_DIRS= [BASE_DIR / 'static',]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'accounts.AppUser'
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_NICKNAME_REQUIRED=True
+ACCOUNT_UNIQUE_NICKNAME=True
+ACCOUNT_UNIQUE_EMAIL=True
+ACCOUNT_USERNAME_REQUIRED=False
+ACCOUNT_AUTHENTICATION_METHOD='email'
+SITE_ID=1
+# 아래는 이메일 인증관련 -> PHONEMUNECRYPT을 모조리 EMAIL로 고치면 이메일 인증 절차 가능
+#ACCOUNT_PHONEMUNECRYPT_VERIFICATION='mandatory'
+#ACCOUNT_CONFIRM_PHONEMUNECRYPT_ON_GET=True
+#ACCOUNT_PHONEMUNECRYPT_CONFIRMATION_ANONYMOUS_REDIRECT_URL='/?verification=1'
+#ACCOUNT_PHONEMUNECRYPT_CONFIRMATION_AUTHENTICATED_REDIRECT_URL='/?verification=1'
+#PHONEMUNECRYPT_BACKEND
