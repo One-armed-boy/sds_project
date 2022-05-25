@@ -1,5 +1,5 @@
 from django.db import models
-#from account_tmp.models import User
+from accounts.models import AppUser
 # Create your models here.
 
 class Res(models.Model):
@@ -11,9 +11,8 @@ class Res(models.Model):
         return self.name
 '''
 class Review(models.Model):
-    #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_review')
-    res = models.ForeignKey(Res,on_delete=models.CASCADE, related_name='res_review')
-    is_pred=models.BooleanField(default=True,null=False,blank=False)
+    author = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='author_review',db_column='author')
+    res = models.ForeignKey(Res,on_delete=models.CASCADE, related_name='res_review',db_column='res')
     score = models.FloatField(null=False,blank=False)
     comment = models.TextField(null=True,blank=True)
     create_date = models.DateTimeField()

@@ -41,7 +41,7 @@ class AppUser(AbstractUser, PermissionsMixin):
     #nickname=models.CharField(max_length=10,unique=True,verbose_name='별명')
     username = None
     # username 필드를 없애고, uique한 필드로 수정
-    email = models.CharField(max_length=50,unique=True)
+    email = models.CharField(max_length=50,unique=True,primary_key=True)
 
     USERNAME_FIELD = 'email'
     # 각 유저를 구분짓는 USERNAME_FIELD의 값을 email 으로 지정 -> 자동적으로 Require
