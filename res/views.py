@@ -46,7 +46,8 @@ class review_list(APIView):
 class Recommendation(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
-        res_df=pd.DataFrame(Res.objects.values_list('id'),columns=['id'])
+        if not Review.objects.filter(author=request.user):
+            return Response('음식점 점수를 하나라도 남겨주세요!')
         review_df=pd.DataFrame(Review.objects.values_list('author','res','score'),columns=['author','res','score'])
         user_res_pivot=review_df.pivot(index='author',columns='res',values='score').fillna(0)
         matrix=np.array(user_res_pivot)
