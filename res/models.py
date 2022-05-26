@@ -16,3 +16,10 @@ class Review(models.Model):
     score = models.FloatField(null=False,blank=False)
     comment = models.TextField(null=True,blank=True)
     create_date = models.DateTimeField()
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['author','res'] ,name='unique_author_res_combination'),]
+
+class Res_reserve(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+    address = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True)
