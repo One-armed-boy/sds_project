@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView,UpdateAPIView,GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
+from django.db.models import Avg
 import numpy as np
 import pandas as pd
 from scipy.sparse.linalg import svds
@@ -20,6 +21,36 @@ def id_to_String(dic):
     for i in dic:
         i['res']=Res.objects.get(id=i['res']).name
     return dic
+
+def recommendation(request,num=5):
+    review_df = pd.DataFrame(Review.objects.values_list('author', 'res', 'score'), columns=['author', 'res', 'score'])
+    user_res_pivot = review_df.pivot(index='author', columns='res', values='score').fillna(0)
+    matrix = np.array(user_res_pivot)
+    user_score_mean = np.mean(matrix, axis=1)
+    matrix -= user_score_mean.reshape(-1, 1)
+    U, sigma, Vt = svds(matrix, k=1)
+    sigma = np.diag(sigma)
+    preds = pd.DataFrame(np.dot(np.dot(U, sigma), Vt) + user_score_mean.reshape(-1, 1), columns=user_res_pivot.columns,
+                         index=user_res_pivot.index)
+    user_preds = preds.loc[str(request.user)]
+    res_preds = pd.DataFrame({'res': np.array(preds.columns), 'score': np.array(user_preds)})
+    visited_list = [i.res.id for i in Review.objects.filter(author=request.user)]
+    res_preds_unvisited = res_preds[(res_preds['res'].isin(visited_list)) != True].sort_values('score', ascending=False)
+    return res_preds_unvisited
+
+class index(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        result = []
+        visited = len(Review.objects.filter(author=request.user))
+        res = len(Res.objects.all())
+        unvisited=res-visited
+        result.append(id_to_String(json.loads(recommendation(request,(unvisited if unvisited<5 else 5)).to_json(orient='records'))) if visited!=0 else "음식점의 점수를 하나라도 남겨주세요.")
+        res_df=pd.DataFrame(Res.objects.values_list('id'),columns=['res'])
+        res_df['score']=res_df['res'].apply(lambda x: Review.objects.filter(res=x).aggregate(average_score=Avg('score'))['average_score'])
+        result.append(id_to_String(json.loads(res_df.sort_values('score',ascending=False).to_json(orient='records'))))
+        return Response(result)
+
 class res_detail(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request,res_id):
@@ -46,21 +77,12 @@ class review_list(APIView):
 class Recommendation(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
-        if not Review.objects.filter(author=request.user):
+        visited=len(Review.objects.filter(author=request.user))
+        res=len(Res.objects.all())
+        if not visited:
             return Response('음식점 점수를 하나라도 남겨주세요!')
-        review_df=pd.DataFrame(Review.objects.values_list('author','res','score'),columns=['author','res','score'])
-        user_res_pivot=review_df.pivot(index='author',columns='res',values='score').fillna(0)
-        matrix=np.array(user_res_pivot)
-        user_score_mean=np.mean(matrix,axis=1)
-        matrix-=user_score_mean.reshape(-1,1)
-        U, sigma, Vt=svds(matrix, k=1)
-        sigma = np.diag(sigma)
-        preds=pd.DataFrame(np.dot(np.dot(U,sigma),Vt)+user_score_mean.reshape(-1,1),columns=user_res_pivot.columns,index=user_res_pivot.index)
-        user_preds=preds.loc[str(request.user)]
-        res_preds=pd.DataFrame({'res':np.array(preds.columns),'score':np.array(user_preds)})
-        visited_list=[i.res.id for i in Review.objects.filter(author=request.user)]
-        res_preds_unvisited=res_preds[(res_preds['res'].isin(visited_list))!=True].sort_values('score',ascending=False)
-        if len(res_preds)!=0:
+        res_preds_unvisited=recommendation(request,res-visited)
+        if len(res_preds_unvisited)!=0:
             serializer = res_preds_unvisited.to_json(orient='records')
             return Response(id_to_String(json.loads(serializer)))
         else:
