@@ -4,9 +4,6 @@
     <list default="true" id="e8bfabb0-0e26-4da7-94cc-72217900e372" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapi/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapi/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapi/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapi/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/res/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/res/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +29,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../pythonnn/Django/bobts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunManager">
     <configuration name="tmp" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
