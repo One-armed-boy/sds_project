@@ -9,6 +9,8 @@ class AppUserManager(BaseUserManager):
         # 사용하지 않는 나머지 값들은 **extra_fields로 모조리 받아 옴
         if not email:
             raise ValueError(_('The email must be filled with'))
+        if not password:
+            raise ValueError(_('The password must be filled with'))
         email=self.normalize_email(email) #이메일 정규화
         user = self.model(email=email,**extra_fields)
 
@@ -38,7 +40,6 @@ class AppUser(AbstractUser, PermissionsMixin):
         verbose_name='고객'
         verbose_name_plural="고객들"
 
-    #nickname=models.CharField(max_length=10,unique=True,verbose_name='별명')
     username = None
     # username 필드를 없애고, uique한 필드로 수정
     email = models.CharField(max_length=50,unique=True,primary_key=True)

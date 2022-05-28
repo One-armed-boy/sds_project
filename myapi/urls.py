@@ -20,7 +20,6 @@ from res.views import index
 urlpatterns = [
     path('',index.as_view(), name='index'),
     path('admin/', admin.site.urls),
-    path('rest-auth/',include('rest_auth.urls')), #유저 token 발급
-    path('rest-auth/registration/',include('rest_auth.registration.urls')),
+    path('accounts/',include('accounts.urls')),
     path('res/',include('res.urls')),
 ]
