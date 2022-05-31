@@ -15,7 +15,7 @@ import os
 import dj_database_url
 import sys
 import json
-import datetime
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 #SECRETS_PATH = os.path.join(BASE_DIR,'Secrets.json')
@@ -56,14 +56,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'accounts.apps.AccountsConfig',
     'res.apps.ResConfig',
 
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
 
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     #회원 가입
-    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -83,6 +88,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':(
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    )
+}
 
 ROOT_URLCONF = 'myapi.urls'
 
@@ -181,3 +197,37 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #ACCOUNT_PHONEMUNECRYPT_CONFIRMATION_ANONYMOUS_REDIRECT_URL='/?verification=1'
 #ACCOUNT_PHONEMUNECRYPT_CONFIRMATION_AUTHENTICATED_REDIRECT_URL='/?verification=1'
 #PHONEMUNECRYPT_BACKEND
+
+REST_USE_JWT = True
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=6),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'email',
+    'USER_ID_CLAIM': 'email',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
