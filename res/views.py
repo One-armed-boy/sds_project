@@ -19,6 +19,7 @@ import json
 
 def id_to_String(dic):
     for i in dic:
+        i['id']=i['res']
         i['res']=Res.objects.get(id=i['res']).name
     return dic
 
