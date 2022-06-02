@@ -39,6 +39,12 @@ def recommendation(request,num=5):
     res_preds_unvisited = res_preds[(res_preds['res'].isin(visited_list)) != True].sort_values('score', ascending=False)
     return res_preds_unvisited
 
+def all_res():
+    res_df = pd.DataFrame(Res.objects.values_list('id', 'name', 'address', 'phone'),
+                          columns=['id', 'name', 'address', 'phone'])
+    res_df["score"] = res_df['id'].apply(lambda x: Review.objects.filter(res=x).aggregate(average_score=Avg('score'))['average_score'])
+    return res_df.sort_values('score',ascending=False)
+
 class index(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
@@ -75,6 +81,15 @@ class review_list(APIView):
         else:
             return Response('없다.')
 
+class All(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        res_df=all_res()
+        if len(res_df)!=0:
+            serializer = res_df.to_json(orient='records')
+            return Response(json.loads(serializer))
+        else:
+            return Response("없다.")
 class Recommendation(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):

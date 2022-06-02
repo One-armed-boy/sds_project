@@ -5,6 +5,7 @@ app_name='res'
 
 urlpatterns=[
     path('',views.index.as_view(),name='index'),
+    path('all/',views.All.as_view(),name='all'),
     path('<int:res_id>/',views.res_detail.as_view(),name='res_detail'),
     path('<int:res_id>/review/',views.review_list.as_view(),name='reviews'),
     path('visited/',views.Visited.as_view(),name='visited'),
