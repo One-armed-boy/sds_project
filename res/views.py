@@ -41,7 +41,7 @@ def recommendation(request,num=5):
 
 def all_res():
     res_df = pd.DataFrame(Res.objects.values_list('id', 'name', 'address', 'phone'),
-                          columns=['id', 'name', 'address', 'phone'])
+                          columns=['id', 'res', 'address', 'phone'])
     res_df["score"] = res_df['id'].apply(lambda x: Review.objects.filter(res=x).aggregate(average_score=Avg('score'))['average_score'])
     return res_df.sort_values('score',ascending=False)
 
