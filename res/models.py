@@ -3,7 +3,7 @@ from accounts.models import AppUser
 # Create your models here.
 
 class Res(models.Model):
-    res =models.CharField(max_length=20,unique=True)
+    name =models.CharField(max_length=20,unique=True)
     address=models.CharField(max_length=50,null=True,blank=True)
     phone=models.CharField(max_length=15,null=True,blank=True)
 '''
