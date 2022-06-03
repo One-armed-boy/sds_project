@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView,UpdateAPIView,GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
-from django.db.models import Avg
+from django.db.models import Avg,Q
 import numpy as np
 import pandas as pd
 from scipy.sparse.linalg import svds
@@ -139,4 +139,14 @@ class scoring_update(UpdateAPIView,CreateAPIView):
     def perform_update(self, serializer):
         author = get_object_or_404(AppUser,email=self.request.user)
         return serializer.save(author=author,create_date=timezone.now())
+
+class res_search(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request,kw):
+        search = Res.objects.filter(Q(name__icontains=kw)).distinct()
+        if search:
+            serializer = ResSerializer(search,many=True)
+            return Response(serializer.data)
+        else:
+            return Response("검색결과가 존재하지 않습니다.")
 
