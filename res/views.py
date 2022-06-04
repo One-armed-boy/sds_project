@@ -128,7 +128,7 @@ class scoring_create(CreateAPIView):
         author = get_object_or_404(AppUser,email=self.request.user)
         return serializer.save(author=author,create_date=timezone.now())
 
-class scoring_update(UpdateAPIView,CreateAPIView):
+class scoring_update(UpdateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
