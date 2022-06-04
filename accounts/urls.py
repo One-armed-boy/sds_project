@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from .views import my_review
 app_name='accounts'
 
 urlpatterns=[
@@ -16,4 +17,6 @@ urlpatterns=[
 
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('mypage/myreview/',my_review.as_view(),name="my_review"),
 ]
