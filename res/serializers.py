@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Res,Review,Reserve
+from .models import Res,Review,reserve
 
 class ResSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +11,7 @@ class ResSerializer(serializers.ModelSerializer):
 
 class ReserveSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Reserve
+        model=reserve
         fields=['id','name','address','phone']
     name = serializers.CharField(max_length=30, required=False, allow_blank=False)
     address = serializers.CharField(max_length=50, required=False, allow_blank=True)
