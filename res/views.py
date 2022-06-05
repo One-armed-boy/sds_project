@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth.decorators import login_required
-from .models import Res,Review,reserve
+from .models import Res,Review,Reserve
 from accounts.models import AppUser
 from .serializers import ResSerializer,ReviewSerializer
 from rest_framework.views import APIView
@@ -115,7 +115,7 @@ class Visited(APIView):
             return Response('없다.')
 
 class add_res_reserve(CreateAPIView):
-    queryset = reserve.objects.all()
+    queryset = Reserve.objects.all()
     serializer_class = ResSerializer
     permission_classes = [IsAuthenticated]
 
