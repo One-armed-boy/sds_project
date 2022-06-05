@@ -7,7 +7,7 @@ from .models import Res,Review,reserve
 from accounts.models import AppUser
 from .serializers import ResSerializer,ReviewSerializer,ReserveSerializer
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView,UpdateAPIView,GenericAPIView
+from rest_framework.generics import CreateAPIView,UpdateAPIView,GenericAPIView,DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from django.db.models import Avg,Q
@@ -139,6 +139,17 @@ class scoring_update(UpdateAPIView):
     def perform_update(self, serializer):
         author = get_object_or_404(AppUser,email=self.request.user)
         return serializer.save(author=author,create_date=timezone.now())
+
+class scoring_delete(DestroyAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset,author=self.request.user,res=self.kwargs['res_id'])
+        return obj
+
 
 class res_search(APIView):
     permission_classes = [IsAuthenticated]

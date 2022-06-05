@@ -13,6 +13,7 @@ urlpatterns=[
     path('recommendation/',views.Recommendation.as_view(),name='recommendation'),
     path('scoring/create/',views.scoring_create.as_view(), name='scoring_create'),
     path('scoring/update/',views.scoring_update.as_view(), name='scoring_update'),
+    path('scoring/delete/<int:res_id>',views.scoring_delete.as_view(), name="scoring_delete"),
     path('add/',views.add_res_reserve.as_view(),name='add'),
     #path('visited/<int:author_id>/',views.visited_res.as_view(),name='visited_res'),
 ]
