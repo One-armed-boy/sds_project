@@ -20,6 +20,6 @@ class Review(models.Model):
         constraints = [models.UniqueConstraint(fields=['author','res'] ,name='unique_author_res_combination'),]
 
 class Reserve(models.Model):
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=20, unique=False)
     address = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=15, null=True, blank=True)

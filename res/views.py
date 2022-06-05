@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from django.contrib.auth.decorators import login_required
 from .models import Res,Review,Reserve
 from accounts.models import AppUser
-from .serializers import ResSerializer,ReviewSerializer
+from .serializers import ResSerializer,ReviewSerializer,ReserveSerializer
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView,UpdateAPIView,GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -116,7 +116,7 @@ class Visited(APIView):
 
 class add_res_reserve(CreateAPIView):
     queryset = Reserve.objects.all()
-    serializer_class = ResSerializer
+    serializer_class = ReserveSerializer
     permission_classes = [IsAuthenticated]
 
 class scoring_create(CreateAPIView):
