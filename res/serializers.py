@@ -12,4 +12,5 @@ class ResSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model=Review
-        fields=['author','res','score','comment']
+        fields=['author','res','score','comment','create_date']
+    create_date = serializers.DateTimeField(required=False)
