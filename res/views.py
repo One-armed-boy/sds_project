@@ -29,7 +29,7 @@ def recommendation(request,num=5):
     matrix = np.array(user_res_pivot)
     user_score_mean = np.mean(matrix, axis=1)
     matrix -= user_score_mean.reshape(-1, 1)
-    U, sigma, Vt = svds(matrix, k=1)
+    U, sigma, Vt = svds(matrix, k=10)
     sigma = np.diag(sigma)
     preds = pd.DataFrame(np.dot(np.dot(U, sigma), Vt) + user_score_mean.reshape(-1, 1), columns=user_res_pivot.columns,
                          index=user_res_pivot.index)
