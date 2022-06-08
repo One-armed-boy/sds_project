@@ -6,6 +6,7 @@ class Res(models.Model):
     name =models.CharField(max_length=20,unique=True)
     address=models.CharField(max_length=50,null=True,blank=True)
     phone=models.CharField(max_length=15,null=True,blank=True)
+    category = models.CharField(max_length=20,null=True,blank=True)
 '''
     def _str__(self):
         return self.name
